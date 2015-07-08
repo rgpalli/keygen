@@ -1,0 +1,18 @@
+#!/opt/chef/embedded/bin/ruby
+#########################################
+
+require 'ruby_expect'
+fileloc = '<%= @fileloc %>'
+pswd = '<%= @password %>'
+master = '<%= @server %>'
+
+exp = RubyExpect::Expect.spawn('ssh-copy-id -i <%= @fileloc %> <%= @user %>@<%= @server %>', :debug => true)
+exp.timeout = 50
+exp.procedure do
+   each do
+    expect "Password:" do
+		send pswd
+	end
+	expect "Now try logging into the machine,"
+   end
+end
